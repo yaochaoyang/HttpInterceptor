@@ -1,15 +1,15 @@
 package com.chaoyang.network.processor
 
 import com.chaoyang.network.L
-import com.chaoyang.network.OpMpRequest
-import com.chaoyang.network.OpMpResult
+import com.chaoyang.network.MyRequest
+import com.chaoyang.network.MyResult
 
 /**
  * @author: chaoyang
  * @create: 2019-12-03 17:04
  * @description: 请自行添加对class描述
  **/
-class DefaultVerifyProcessor<T : OpMpRequest, R : OpMpResult> : VerifyProcessor<T, R> {
+class DefaultVerifyProcessor<T : MyRequest, R : MyResult> : VerifyProcessor<T, R> {
     private var doubleVerify = true
 
     override fun needVerify(request: T, result: R): Boolean {

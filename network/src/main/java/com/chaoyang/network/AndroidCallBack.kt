@@ -5,24 +5,24 @@ package com.chaoyang.network
  * @create: 2019-12-03 19:03
  * @description: 请自行添加对class描述
  **/
-class AndroidOpMpCallBack(
+class AndroidCallBack(
     private val scheduler: Scheduler,
-    private val listener: OpMpListener
-) : OpMpCallBack {
+    private val listener: MyListener
+) : MyCallBack {
 
     override fun onStart() {
         dispatch { listener.onStart() }
     }
 
-    override fun onSuccess(result: OpMpResult) {
+    override fun onSuccess(result: MyResult) {
         dispatch { listener.onSuccess(result) }
     }
 
-    override fun onFailure(cause: OpMpException) {
+    override fun onFailure(cause: MyException) {
         dispatch { listener.onFailure(cause) }
     }
 
-    override fun onSpecialStatus(cause: OpMpException) {
+    override fun onSpecialStatus(cause: MyException) {
         dispatch { listener.onSpecialStatus(cause) }
     }
 

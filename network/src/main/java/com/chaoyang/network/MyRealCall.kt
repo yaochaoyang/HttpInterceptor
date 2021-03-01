@@ -1,7 +1,7 @@
 package com.chaoyang.network
 
 import com.chaoyang.network.interceptor.ExecuteInterceptor
-import com.chaoyang.network.interceptor.OpMpInterceptor
+import com.chaoyang.network.interceptor.MyInterceptor
 import java.util.concurrent.Callable
 import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
@@ -11,13 +11,13 @@ import java.util.concurrent.TimeUnit
  * @create: 2019-12-04 11:13
  * @description: 请自行添加对class描述
  **/
-class OpMpRealCall<T : OpMpRequest, R : OpMpResult>(
-    override val wrapper: OpMpWrapper<T, R>,
+class MyRealCall<T : MyRequest, R : MyResult>(
+    override val wrapper: MyWrapper<T, R>,
     override val result: R,
-    private val client: OpMpClient
-) : OpMpCall<T, R> {
+    private val client: MyClient
+) : MyCall<T, R> {
 
-    private lateinit var callBack: OpMpCallBack
+    private lateinit var callBack: MyCallBack
 
     private val future: Future<R> by lazy {
         L.i("当前线程名称 = " + Thread.currentThread().name)
@@ -30,27 +30,27 @@ class OpMpRealCall<T : OpMpRequest, R : OpMpResult>(
 
     override fun execute(): R {
         val wrappers = wrapper.interceptors
-        val clients = client.interceptors as List<OpMpInterceptor<T, R>>
+        val clients = client.interceptors as List<MyInterceptor<T, R>>
         val initialCapacity = wrappers.size + clients.size + 1
-        val interceptors = ArrayList<OpMpInterceptor<T, R>>(initialCapacity)
+        val interceptors = ArrayList<MyInterceptor<T, R>>(initialCapacity)
         L.i("SensitiveInterceptor 当前线程名称 = " + Thread.currentThread().name + " wrappers = ${wrappers.size}  ${clients.size} ")
         interceptors.addAll(wrappers)
         interceptors.addAll(clients)
         interceptors.add(ExecuteInterceptor())
-        val opMpRealChain = OpMpRealChain(interceptors, 0, result, wrapper, this)
+        val opMpRealChain = MyRealChain(interceptors, 0, result, wrapper, this)
         return opMpRealChain.proceed(wrapper)
     }
 
-    override fun enqueue(callBack: OpMpCallBack) {
+    override fun enqueue(callBack: MyCallBack) {
         this.callBack = callBack
         this.callBack.onStart()
         client.executor.execute(AsyncCall(future, wrapper, callBack))
     }
 
-    private class AsyncCall<T : OpMpRequest, R : OpMpResult>(
+    private class AsyncCall<T : MyRequest, R : MyResult>(
         val future: Future<R>,
-        val wrapper: OpMpWrapper<T, R>,
-        val callBack: OpMpCallBack
+        val wrapper: MyWrapper<T, R>,
+        val callBack: MyCallBack
     ) : Runnable {
 
         override fun run() {
@@ -62,15 +62,15 @@ class OpMpRealCall<T : OpMpRequest, R : OpMpResult>(
                 }
                 callBack.onSuccess(result)
             } catch (e: Throwable) {
-                if (e is OpMpException) {
+                if (e is MyException) {
                     L.i(" OpMpException " + e.cause)
                 } else {
-                    if (e.cause is OpMpException) {
+                    if (e.cause is MyException) {
                         L.i(" ===== OpMpException ")
                     }
                     L.i(" Exception $e  ====== " + e.cause)
                 }
-                callBack.onFailure(OpMpException("500", "${e.message}"))
+                callBack.onFailure(MyException("500", "${e.message}"))
             } finally {
                 callBack.onFinish()
             }

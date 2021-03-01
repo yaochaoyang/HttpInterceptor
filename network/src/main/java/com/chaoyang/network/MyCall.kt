@@ -5,9 +5,9 @@ package com.chaoyang.network
  * @create: 2019-12-03 16:33
  * @description: 请自行添加对class描述
  **/
-interface OpMpCall<T : OpMpRequest, R : OpMpResult> {
+interface MyCall<T : MyRequest, R : MyResult> {
 
-    val wrapper: OpMpWrapper<T, R>
+    val wrapper: MyWrapper<T, R>
 
     val result: R
 
@@ -15,5 +15,5 @@ interface OpMpCall<T : OpMpRequest, R : OpMpResult> {
 
     fun execute(): R
 
-    fun enqueue(callBack: OpMpCallBack)
+    fun enqueue(callBack: MyCallBack)
 }

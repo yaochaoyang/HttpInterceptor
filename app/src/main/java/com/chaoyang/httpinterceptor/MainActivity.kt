@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.chaoyang.network.*
 import com.chaoyang.network.interceptor.LoggerInterceptor
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,20 +16,20 @@ class MainActivity : AppCompatActivity() {
     private fun testNetwork() {
         val loginRequest = LoginRequest("test","123")
         val LoginResult = LoginResult("ssss")
-        OpMpPackage(loginRequest,LoginResult)
+        MyPackage(loginRequest,LoginResult)
             .addInterceptor(LoggerInterceptor())
-            .getExecutor().enqueue(object :OpMpListener{
+            .getExecutor().enqueue(object :MyListener{
             override fun onStart() {
                 super.onStart()
                 L.i("onStart")
             }
 
-            override fun onSuccess(result: OpMpResult) {
+            override fun onSuccess(result: MyResult) {
                 super.onSuccess(result)
                 L.i("onSuccess")
             }
 
-            override fun onFailure(cause: OpMpException) {
+            override fun onFailure(cause: MyException) {
                 super.onFailure(cause)
                 L.i("onFailure")
             }

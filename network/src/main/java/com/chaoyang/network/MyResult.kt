@@ -9,4 +9,4 @@ package com.chaoyang.network
  * @UpdateDate: 2/22/21 11:27 AM
  * @UpdateRemark: Modify the description
  */
-interface OpMpResult
+interface MyResult

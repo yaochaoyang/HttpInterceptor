@@ -1,6 +1,6 @@
 package com.chaoyang.httpinterceptor
 
-import com.chaoyang.network.OpMpResult
+import com.chaoyang.network.MyResult
 
 /**
  *
@@ -12,4 +12,4 @@ import com.chaoyang.network.OpMpResult
  * @UpdateDate:     2/22/21 3:31 PM
  * @UpdateRemark:   Modify the description
  */
-data class LoginResult(val session: String?) : OpMpResult
+data class LoginResult(val session: String?) : MyResult

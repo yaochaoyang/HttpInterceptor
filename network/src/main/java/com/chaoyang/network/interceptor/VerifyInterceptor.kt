@@ -9,10 +9,10 @@ import java.util.concurrent.ConcurrentHashMap
  * @create: 2019-12-17 18:13
  * @description: 请自行添加对class描述
  **/
-class OpMpVerifyInterceptor<T : OpMpRequest, R : OpMpResult>(
+class VerifyInterceptor<T : MyRequest, R : MyResult>(
     observable: ActivityObservable,
     private val verifier: DefaultVerifier = DefaultVerifier()
-) : OpMpInterceptor<T, R> {
+) : MyInterceptor<T, R> {
     @Volatile
     private var topActivity: Activity? = null
 
@@ -35,7 +35,7 @@ class OpMpVerifyInterceptor<T : OpMpRequest, R : OpMpResult>(
         observable.registerActivityObserver(observer)
     }
 
-    override fun intercept(chain: OpMpInterceptor.Chain<T, R>): R {
+    override fun intercept(chain: MyInterceptor.Chain<T, R>): R {
         val wrapper = chain.wrapper
         val request = wrapper.request
         val processor = chain.wrapper.verifyProcessor
@@ -61,13 +61,13 @@ class OpMpVerifyInterceptor<T : OpMpRequest, R : OpMpResult>(
                 L.i("OpMpVerifyInterceptor result = $result  while 当前线程" + Thread.currentThread().name)
                 wait(request)
                 if (!verifySuccess) {
-                    throw OpMpException("500", "onAction")
+                    throw MyException("500", "onAction")
                 }
                 L.i("OpMpVerifyInterceptor result = $result   当前线程" + Thread.currentThread().name)
                 if (processor.isNeedDoubleVerify()) {
                     result = chain.proceed(wrapper)
                 } else {
-                    throw OpMpException("500", "进入二次循环校验")
+                    throw MyException("500", "进入二次循环校验")
                 }
             }
         } finally {
@@ -80,12 +80,12 @@ class OpMpVerifyInterceptor<T : OpMpRequest, R : OpMpResult>(
     private fun checkedActivity(): Activity {
         val activity = topActivity
         if (activity == null || activity.isFinishing) {
-            throw OpMpException("500", "topActivity is null or isFinishing.")
+            throw MyException("500", "topActivity is null or isFinishing.")
         }
         return activity
     }
 
-    private fun wait(request: OpMpRequest) {
+    private fun wait(request: MyRequest) {
         val lock = locks.getOrPut(request) { Object() }
         //[request : object]
         //wait = java.lang.Object@9737b1e
@@ -95,7 +95,7 @@ class OpMpVerifyInterceptor<T : OpMpRequest, R : OpMpResult>(
         }
     }
 
-    private fun notify(request: OpMpRequest) {
+    private fun notify(request: MyRequest) {
         val lock = locks[request]
         L.i("OpMpVerifyInterceptor notify = $lock")
         if (lock != null) {

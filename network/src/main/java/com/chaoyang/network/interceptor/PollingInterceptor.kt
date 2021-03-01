@@ -1,18 +1,18 @@
 package com.chaoyang.network.interceptor
 
 import com.chaoyang.network.L
-import com.chaoyang.network.OpMpRequest
-import com.chaoyang.network.OpMpResult
+import com.chaoyang.network.MyRequest
+import com.chaoyang.network.MyResult
 
 /**
  * @author: chaoyang
  * @create: 2019-12-23 16:34
  * @description: 请自行添加对class描述
  **/
-class OpMpPollingInterceptor<T : OpMpRequest, R : OpMpResult> : OpMpInterceptor<T, R> {
+class PollingInterceptor<T : MyRequest, R : MyResult> : MyInterceptor<T, R> {
 
 
-    override fun intercept(chain: OpMpInterceptor.Chain<T, R>): R {
+    override fun intercept(chain: MyInterceptor.Chain<T, R>): R {
         Thread.sleep(1000L)
         val wrapper = chain.wrapper
         L.i(" OpMpPollingInterceptor request = " + wrapper.request.toString())

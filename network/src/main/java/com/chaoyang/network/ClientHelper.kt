@@ -1,8 +1,8 @@
 package com.chaoyang.network
 
 import com.chaoyang.network.interceptor.LoggerInterceptor
-import com.chaoyang.network.interceptor.OpMpVerifyInterceptor
-import com.chaoyang.network.interceptor.OpMpPollingInterceptor
+import com.chaoyang.network.interceptor.VerifyInterceptor
+import com.chaoyang.network.interceptor.PollingInterceptor
 import java.util.concurrent.Executors
 
 /**
@@ -20,10 +20,10 @@ object ClientHelper {
 
 
     private fun initOpMpExpress(client: IClient) {
-        val opMpClient = OpMpClient(client, Executors.newCachedThreadPool())
-            .addInterceptor(OpMpPollingInterceptor<OpMpRequest, OpMpResult>())
-            .addInterceptor(OpMpVerifyInterceptor<OpMpRequest, OpMpResult>(client))
-            .addInterceptor(LoggerInterceptor<OpMpRequest, OpMpResult>())
-        OpMpExpress.init(opMpClient, SchedulerImpl());
+        val opMpClient = MyClient(Executors.newCachedThreadPool())
+            .addInterceptor(PollingInterceptor<MyRequest, MyResult>())
+            .addInterceptor(VerifyInterceptor<MyRequest, MyResult>(client))
+            .addInterceptor(LoggerInterceptor<MyRequest, MyResult>())
+        MyExpress.init(opMpClient, SchedulerImpl());
     }
 }

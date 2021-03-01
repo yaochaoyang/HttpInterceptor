@@ -1,8 +1,8 @@
 package com.chaoyang.network.interceptor
 
 import com.chaoyang.network.L
-import com.chaoyang.network.OpMpRequest
-import com.chaoyang.network.OpMpResult
+import com.chaoyang.network.MyRequest
+import com.chaoyang.network.MyResult
 import com.chaoyang.network.toJson
 import java.lang.StringBuilder
 
@@ -12,12 +12,12 @@ import java.lang.StringBuilder
  * @description: 请自行添加对class描述
  *
  **/
-class LoggerInterceptor<T : OpMpRequest, R : OpMpResult> : OpMpInterceptor<T, R> {
+class LoggerInterceptor<T : MyRequest, R : MyResult> : MyInterceptor<T, R> {
     companion object {
         const val TAG = "LoggerCore"
     }
 
-    override fun intercept(chain: OpMpInterceptor.Chain<T, R>): R {
+    override fun intercept(chain: MyInterceptor.Chain<T, R>): R {
         val start = System.currentTimeMillis()
         val elapse = System.currentTimeMillis() - start
         val result = chain.proceed(chain.wrapper)

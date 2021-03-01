@@ -1,6 +1,6 @@
 package com.chaoyang.httpinterceptor
 
-import com.chaoyang.network.OpMpRequest
+import com.chaoyang.network.MyRequest
 
 /**
  *
@@ -12,4 +12,4 @@ import com.chaoyang.network.OpMpRequest
  * @UpdateDate:     2/22/21 3:30 PM
  * @UpdateRemark:   Modify the description
  */
-data class LoginRequest(val name: String, val pwd: String) : OpMpRequest
+data class LoginRequest(val name: String, val pwd: String) : MyRequest

@@ -10,9 +10,9 @@ import com.chaoyang.network.processor.ExecuteProcessor
  * @description: 请自行添加对class描述
  *
  **/
-class ExecuteInterceptor<T : OpMpRequest, R : OpMpResult> : OpMpInterceptor<T, R> {
+class ExecuteInterceptor<T : MyRequest, R : MyResult> : MyInterceptor<T, R> {
 
-    override fun intercept(chain: OpMpInterceptor.Chain<T, R>): R {
+    override fun intercept(chain: MyInterceptor.Chain<T, R>): R {
         try {
             val wrapper = chain.wrapper
             val executeProcessor = ExecuteProcessor<T>()
@@ -23,7 +23,7 @@ class ExecuteInterceptor<T : OpMpRequest, R : OpMpResult> : OpMpInterceptor<T, R
             L.i("ExecuteInterceptor 36 result = ${opMpResult.toString()}")
             return opMpResult
         } catch (e: Exception) {
-            throw OpMpException("505", " NetWork Exception")
+            throw MyException("505", " NetWork Exception")
         }
     }
 }
